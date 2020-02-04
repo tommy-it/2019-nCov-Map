@@ -29,19 +29,22 @@ class Desc(BaseFun):
         # print(data_list)
 
     def insets_sql(self):
-        sql = "INSERT INTO api_desc (createTime,modifyTime,infectSource,passWay,imgUrl,dailyPic,countConfirmedCount,countSuspectedCount,countCuredCount,countDeadCount,virus,remark1,remark2,generalRemark,ccTime) " \
-              "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) " \
-              "ON DUPLICATE KEY UPDATE ccTime=%s,modifyTime=%s,countConfirmedCount=%s,countSuspectedCount=%s,countCuredCount=%s,countDeadCount=%s"
+        sql = "INSERT INTO api_desc (createTime,modifyTime,infectSource,passWay,imgUrl,dailyPic,dailyPics,countConfirmedCount,countSuspectedCount,countCuredCount,countDeadCount,countSeriousCount,countSuspectedIncr,countConfirmedIncr,countCuredIncr,countDeadIncr,countSeriousIncr,virus,remark1,remark2,generalRemark,ccTime) " \
+              "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) " \
+              "ON DUPLICATE KEY UPDATE ccTime=%s,modifyTime=%s,countConfirmedCount=%s,countSuspectedCount=%s,countCuredCount=%s,countDeadCount=%s,countSeriousCount=%s,countSuspectedIncr=%s,countConfirmedIncr=%s,countCuredIncr=%s,countDeadIncr=%s,countSeriousIncr=%s"
         # 获取一个光标
         self.conn.cursor()
 
         # 连接并执行
         int_val = (time_change(data_list[1]), time_change(data_list[2]), data_list[3], data_list[4],
-                   data_list[5], data_list[6], data_list[10], data_list[11], data_list[12], data_list[13],
-                   data_list[20], data_list[21], data_list[22],
-                   data_list[26], formatted_date)
-        upd_val = (formatted_date, time_change(data_list[2]), data_list[10],
-                   data_list[11], data_list[12], data_list[13])
+                   data_list[5], data_list[6], data_list[7], data_list[11], data_list[12], data_list[13], data_list[14],
+                   data_list[15], data_list[16], data_list[17],
+                   data_list[18], data_list[19], data_list[20], data_list[21], data_list[22], data_list[23],
+                   data_list[30], formatted_date)
+        upd_val = (
+        formatted_date, time_change(data_list[2]), data_list[11], data_list[12], data_list[13], data_list[14],
+        data_list[15], data_list[16], data_list[17],
+        data_list[18], data_list[19], data_list[20])
         val = (*int_val, *upd_val)
         self.conn.cursor().execute(sql, val)
         # 涉及写操作注意要提交
@@ -54,6 +57,7 @@ class Desc(BaseFun):
     def start(self):
         self.data_4_list()
         self.insets_sql()
+
 
 if __name__ == '__main__':
     insets_data = Desc()
